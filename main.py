@@ -6,13 +6,23 @@
 # 2. open music (Spotify, YouTube Music)
 # 3. open google (search)
 # 4. open youtube
+# 5. check if word is palindrome
 
 import time
 import winsound
 import pygame
+import pyttsx3
+import speech_recognition as sr
+import pyaudio
+import webbrowser
+
+# initialize pyttsx3
+engine = pyttsx3.init("sapi5")
+voices = engine.getProperty("voices")
+# 1 for female voice 0 for male voice
+engine.setProperty('voice', voices[1].id)
 
 # Mini project #1: Building a timer
-
 def countdown_timer(t):
     # initialize and load music file
     pygame.mixer.init()
@@ -30,25 +40,53 @@ def countdown_timer(t):
         pygame.time.Clock().tick(10)
     # #             Hz,   msec
     # winsound.Beep(1000, 5000)
-# countdown_timer(5)
+
+# countdown_timer(10)
 
 # Mini Project #2:
 
 # Compare two strings to see if equal
 
-word1 = "racecar"
-word2 = "anna"
-word3 = "moon"
+# Create a program to check if a word is a palindrome
+def check_palidrome(word):
+    for x in range(int(len(word)/2)):
+        if word[x] == word[len(word)-1-x]:
+            palindrome = True
+        else:
+            palindrome = False
+            break
+    print(palindrome)
 
-print(word1[0])
-print(len(word1))
+# check_palidrome("regerg")
 
 
-for x in range(len(word3)):
-    if word3[x] == word3[len(word3)-1-x]:
-        palidrome = True
-    else:
-        palidrome = False
-        break
+# Mini project #3
+# Convert speech to text and return text
+def speak(audio):
+    engine.say(audio)
+    engine.runAndWait()
 
-print(palidrome)
+# speak("Hello World")
+def speech_to_text():
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Listening....")
+        r.pause_threshold = 1
+        audio = r.listen(source)
+    try:
+        query = r.recognize_google(audio)
+        print(query)
+    except:
+        print("error")
+        speak("Error try again")
+
+# speech_to_text()
+
+# Mini project #4
+# Navigate/Go-to a certain website
+
+def web(website):
+    webbrowser.open(website)
+
+web("google.com")
+
