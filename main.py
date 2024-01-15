@@ -3,7 +3,7 @@
 # Take in a voice command
 # Proceed with the action
 # 1. Function for a timer
-# 2. open music (Spotify, YouTube Music)
+# 2. open music (Spotify)
 # 3. open google (search)
 # 4. open youtube
 # 5. check if word is palindrome
@@ -15,6 +15,8 @@ import pyttsx3
 import speech_recognition as sr
 import pyaudio
 import webbrowser
+import urllib
+import os
 
 # initialize pyttsx3
 engine = pyttsx3.init("sapi5")
@@ -45,8 +47,6 @@ def countdown_timer(t):
 
 # Mini Project #2:
 
-# Compare two strings to see if equal
-
 # Create a program to check if a word is a palindrome
 def check_palidrome(word):
     for x in range(int(len(word)/2)):
@@ -59,7 +59,6 @@ def check_palidrome(word):
 
 # check_palidrome("regerg")
 
-
 # Mini project #3
 # Convert speech to text and return text
 def speak(audio):
@@ -67,6 +66,7 @@ def speak(audio):
     engine.runAndWait()
 
 # speak("Hello World")
+
 def speech_to_text():
     r = sr.Recognizer()
     with sr.Microphone() as source:
@@ -76,9 +76,12 @@ def speech_to_text():
     try:
         query = r.recognize_google(audio)
         print(query)
+        return query
+        # speak(query)
     except:
         print("error")
         speak("Error try again")
+        return None
 
 # speech_to_text()
 
@@ -88,5 +91,47 @@ def speech_to_text():
 def web(website):
     webbrowser.open(website)
 
-web("google.com")
+# web("spotify.com")
+
+def google_search():
+    url = "google.com/search?q="
+    speak("Would you like to google search anything, please say yes or no")
+    answer = speech_to_text()
+
+    if answer == "yes":
+        speak("What would you like to search? ")
+        search = speech_to_text()
+        search = search.replace(" ", "+")
+        final_url = url + search
+        webbrowser.open(final_url)
+    else:
+        webbrowser.open(url)
+
+# google_search()
+
+# Mini project #5
+# Access/open a local application
+
+def open_local_applications(application):
+    if application == "Spotify":
+        speak("Opening Spotify")
+        loc = "Spotify location.exe"
+    elif application == "Zoom":
+        speak("Opening zoom")
+        loc = "zoom location"
+
+    os.startfile(loc)
+
+
+# Integration of functions
+
+# 1. Listen for "Python" and activates listening for commands
+# 2. Speak and prompt what the user wants to do
+# 3. Take in speech command and proceed with execution accordingly
+# 4.
+
+
+
+
+
 
