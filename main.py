@@ -5,7 +5,7 @@
 # 1. Function for a timer
 # 2. open music (Spotify)
 # 3. open google (search)
-# 4. open youtube
+# 4. open youtube, wikipedia, canvas
 # 5. check if word is palindrome
 
 import time
@@ -24,19 +24,29 @@ voices = engine.getProperty("voices")
 # 1 for female voice 0 for male voice
 engine.setProperty('voice', voices[1].id)
 
+dict_num = {"one":1, "two":2, "three":3, "four":4, "five":5}
+
+
+
 # Mini project #1: Building a timer
 def countdown_timer(t):
     # initialize and load music file
     pygame.mixer.init()
     pygame.mixer.music.load("ring.mp3")
     # timer starts here
-    while t > 0:
-        mins, secs = divmod(t, 60)
+
+    if t in dict_num:
+        int_t = dict_num[t]
+    else:
+        int_t = int(t)
+
+    while int_t > 0:
+        mins, secs = divmod(int_t, 60)
         timer = '{:02d}:{:02d}'.format(mins, secs)
         #             5:45
         print(timer)
         time.sleep(1)
-        t -= 1
+        int_t -= 1
     pygame.mixer.music.play()
     while pygame.mixer.music.get_busy():
         pygame.time.Clock().tick(10)
@@ -71,7 +81,7 @@ def speech_to_text():
     r = sr.Recognizer()
     with sr.Microphone() as source:
         print("Listening....")
-        r.pause_threshold = 1
+        r.pause_threshold = 0.5
         audio = r.listen(source)
     try:
         query = r.recognize_google(audio)
@@ -120,6 +130,7 @@ def open_local_applications(application):
         speak("Opening zoom")
         loc = "zoom location"
 
+    # run file at location
     os.startfile(loc)
 
 
@@ -128,7 +139,60 @@ def open_local_applications(application):
 # 1. Listen for "Python" and activates listening for commands
 # 2. Speak and prompt what the user wants to do
 # 3. Take in speech command and proceed with execution accordingly
-# 4.
+
+activated = False
+answer = None
+
+while True:
+    while(answer != "Python"):
+        answer = speech_to_text() # either returns what we said OR None
+
+    if(answer == 'Python'):
+        activated = True
+
+    if(activated == True):
+        speak("What do you want to do")
+        action = speech_to_text() # either returns what we said OR None
+        if action == "Youtube":
+            web("youtube.com")
+        elif action == "Canvas":
+            web("canvas.com")
+        elif action == "stop":
+            activated = False
+            print("stop")
+        elif action == "timer":
+            countdown_timer(10)
+
+
+
+
+
+# Classes
+# class Robot():
+#     def __init__(self, motor1, motor2):
+#         self.motor1 = motor1
+#         self.motor2 = motor2
+#
+#     def __int__(self, motor1, motor2, motor3, motor4):
+#         self.motor1 = motor1
+#         self.motor2 = motor2
+#         self.motor3 = motor3
+#         self.motor4 = motor4
+#
+#     def four_motor_drive(self):
+#         self.motor1.drive()
+#         self.motor2.drive()
+#         self.motor3.drive()
+#         self.motor4.drive()
+#
+# robot = Robot(m1, m2) # robot is an object of class Robot
+# robot.four_motor_drive()
+
+
+
+
+
+
 
 
 
